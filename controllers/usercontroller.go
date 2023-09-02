@@ -41,7 +41,7 @@ func Register_user(c *gin.Context) {
 
 	if result := database.DB.Create(&user); result.Error != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "Failed to create user",
+			"error": "Failed to create user. please change the email or the password",
 		})
 		return
 	}
@@ -121,7 +121,7 @@ func Update_user(c *gin.Context) {
 		input_user.Password = hashedPass
 	}
 	if database.DB.Model(&user).Where("id = ?", input_user.Id).Updates(&input_user).RowsAffected == 0 {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "Not found"})
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "Failed to update. please change the email or the password "})
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{
